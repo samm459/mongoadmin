@@ -140,6 +140,10 @@
       "node_modules",
       "build/app/node_modules"
     ],
+    "modulePathIgnorePatterns": [
+      "node_modules",
+      "build"
+    ],
     "setupFiles": [
       "./.erb/scripts/check-build-exists.js"
     ]
