@@ -1,23 +1,17 @@
 const { contextBridge, ipcRenderer } = require('electron');
+const uuid = require('uuid');
 
-contextBridge.exposeInMainWorld('electron', {
-  ipcRenderer: {
-    myPing() {
-      ipcRenderer.send('ipc-example', 'ping');
-    },
-    on(channel, func) {
-      const validChannels = ['ipc-example'];
-      if (validChannels.includes(channel)) {
-        // Deliberately strip event as it includes `sender`
-        ipcRenderer.on(channel, (event, ...args) => func(...args));
-      }
-    },
-    once(channel, func) {
-      const validChannels = ['ipc-example'];
-      if (validChannels.includes(channel)) {
-        // Deliberately strip event as it includes `sender`
-        ipcRenderer.once(channel, (event, ...args) => func(...args));
-      }
-    },
+contextBridge.exposeInMainWorld('vm', {
+  exec(src) {
+    const id = uuid.v4();
+    return new Promise((resolve, reject) => {
+      ipcRenderer.send('vm', { id, src });
+      ipcRenderer.on(id, (_, data) => {
+        resolve(data);
+      });
+      ipcRenderer.on(`error-${id}`, (_, err) => {
+        reject(err);
+      });
+    });
   },
 });

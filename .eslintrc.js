@@ -3,6 +3,10 @@ module.exports = {
   rules: {
     // A temporary hack related to IDE not resolving correct package.json
     'import/no-extraneous-dependencies': 'off',
+    'import/prefer-default-export': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    'promise/always-return': 'off',
+    'no-console': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,
